@@ -1,4 +1,3 @@
-cat > src/App.jsx << 'EOF'
 import { useState } from "react";
 
 const PERSONAS = [
@@ -32,24 +31,14 @@ export default function App() {
   const sleep = ms => new Promise(r => setTimeout(r, ms));
 
   const callClaude = async (system, user) => {
-    const r = await fetch("https://api.anthropic.com/v1/messages", {
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json",
-        "x-api-key": import.meta.env.VITE_ANTHROPIC_API_KEY,
-        "anthropic-version": "2023-06-01",
-        "anthropic-dangerous-direct-browser-access": "true"
-      },
-      body: JSON.stringify({
-        model:"claude-sonnet-4-20250514",
-        max_tokens:1000,
-        system,
-        messages:[{ role:"user", content:user }]
-      })
+    const r = await fetch("http://localhost:3001/api/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ system, user })
     });
-    if (!r.ok) throw new Error("API error " + r.status);
+    if (!r.ok) throw new Error(`API error ${r.status}`);
     const d = await r.json();
-    const t = d.content[0].text.replace(/```json\n?|```/g,"").trim();
+    const t = d.content[0].text.replace(/```json\n?|```/g, "").trim();
     return JSON.parse(t);
   };
 
@@ -100,7 +89,7 @@ export default function App() {
       </div>
       <div style={{marginBottom:28}}>
         <div style={{display:"flex",justifyContent:"space-between",marginBottom:8}}>
-          <p style={{margin:0,fontSize:12,fontWeight:600,color:"#888",textTransform:"uppercase"}}>Privacy budget (e)</p>
+          <p style={{margin:0,fontSize:12,fontWeight:600,color:"#888",textTransform:"uppercase"}}>Privacy budget (ε)</p>
           <span style={{fontFamily:"monospace",fontSize:14,fontWeight:600}}>{epsilon.toFixed(1)}</span>
         </div>
         <input type="range" min="0.1" max="2.0" step="0.1" value={epsilon} onChange={e=>setEpsilon(parseFloat(e.target.value))} style={{width:"100%"}} />
@@ -109,9 +98,9 @@ export default function App() {
           <span style={{fontSize:11,color:"#aaa"}}>higher utility</span>
         </div>
       </div>
-      {error && <p style={{fontSize:13,color:"red",marginBottom:16}}>{error}</p>}
+      {error && <p style={{fontSize:13,color:"red",marginBottom:16,padding:10,borderRadius:6,border:"1px solid #fcc",background:"#fff5f5"}}>{error}</p>}
       <button onClick={runPipeline} style={{width:"100%",padding:12,fontSize:14,fontWeight:600,background:"#185fa5",color:"#fff",border:"none",borderRadius:8,cursor:"pointer"}}>
-        Run SynthShield Pipeline
+        Run SynthShield Pipeline →
       </button>
     </div>
   );
@@ -119,7 +108,7 @@ export default function App() {
   if (phase === "running") return (
     <div style={{maxWidth:600,margin:"40px auto",padding:"0 20px",fontFamily:"system-ui"}}>
       <h2 style={{fontSize:20,fontWeight:700,margin:"0 0 4px"}}>Pipeline running...</h2>
-      <p style={{margin:"0 0 24px",fontSize:13,color:"#666"}}>Generating {personaType} persona</p>
+      <p style={{margin:"0 0 24px",fontSize:13,color:"#666"}}>Generating {personaType} persona · ε = {epsilon.toFixed(1)}</p>
       {LAYERS.map(layer => {
         const s = layerStatus[layer.id];
         return (
@@ -131,7 +120,7 @@ export default function App() {
               </div>
               {s==="idle" && <span style={{fontSize:11,color:"#aaa"}}>waiting</span>}
               {s==="running" && <span style={{fontSize:11,color:"#185fa5",fontWeight:600}}>processing...</span>}
-              {s==="done" && <span style={{fontSize:11,color:"green",fontWeight:600}}>done</span>}
+              {s==="done" && <span style={{fontSize:11,color:"green",fontWeight:600}}>✓ done</span>}
             </div>
           </div>
         );
@@ -144,7 +133,7 @@ export default function App() {
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:24}}>
         <div>
           <h2 style={{margin:"0 0 4px",fontSize:20,fontWeight:700}}>Persona ready</h2>
-          <p style={{margin:0,fontSize:13,color:"#666"}}>e={epsilon.toFixed(1)} · Data Tank populated</p>
+          <p style={{margin:0,fontSize:13,color:"#666"}}>ε={epsilon.toFixed(1)} · Data Tank populated</p>
         </div>
         <button onClick={reset} style={{padding:"6px 12px",borderRadius:6,border:"1px solid #ddd",background:"#fff",cursor:"pointer"}}>New run</button>
       </div>
@@ -243,4 +232,3 @@ export default function App() {
 
   return null;
 }
-EOF
