@@ -1,16 +1,40 @@
-# React + Vite
+# SynthShield — Artificial User
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> Privacy-preserving synthetic data pipeline for AI testing
 
-Currently, two official plugins are available:
+SynthShield generates realistic synthetic user personas and populates a virtual "Data Tank" with fake emails, calendar events, and app logs — so AI systems can be tested without ever touching real user data.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## How it works
 
-## React Compiler
+- **Layer 01 — Knowledge Acquisition**: Differential Privacy (ε-DP) analysis of behavioural patterns
+- **Layer 02 — Persona Generation**: Claude AI generates a vivid synthetic user profile
+- **Layer 03 — Data Tank**: Claude AI fills a virtual device with matching emails, calendar events, and app logs
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech Stack
 
-## Expanding the ESLint configuration
+- Frontend: React + Vite
+- AI: Claude Sonnet 4 (Anthropic API)
+- Privacy: Differential Privacy (ε-DP)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Getting Started
+
+1. Clone the repo
+   git clone https://github.com/Tejzraj/synthshield.git
+   cd synthshield
+
+2. Install dependencies
+   npm install
+
+3. Set up your API key
+   cp .env.example .env
+   Then open .env and paste your Anthropic API key
+
+4. Run the app
+   npm run dev
+
+5. Open http://localhost:5173
+
+## Team
+
+RVCE SynthShield — RV College of Engineering
+Likhith Raj · Simran S Patil · Parinitha BS · Venkumahanthi Taniya
